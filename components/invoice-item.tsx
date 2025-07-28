@@ -34,7 +34,12 @@ export default function InvoiceItem({ item, index, canRemove }: InvoiceItemProps
         </div>
       </div>
       <div className="col-span-1 flex items-end">
-        <Button className="cursor-pointer" variant="outline" size="icon">
+        <Button
+          className="cursor-pointer"
+          variant="outline"
+          size="icon"
+          onClick={() => removeItem(index)}
+          disabled={!canRemove}>
           <Trash2 className="size-4"></Trash2>
         </Button>
       </div>

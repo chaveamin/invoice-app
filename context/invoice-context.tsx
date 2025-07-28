@@ -8,6 +8,7 @@ interface InvoiceContextType {
   invoice: InvoiceData;
   updateInvoice: (updates: Partial<InvoiceData>) => void;
   addItem: () => void;
+  removeItem: (index: number) => void;
 }
 
 const InvoiceContext = createContext<InvoiceContextType | undefined>(undefined);
@@ -37,8 +38,15 @@ export function InvoiceProvider({ children }: { children: ReactNode }) {
     updateInvoice({ items: [...invoice.items, newItem] });
   };
 
+  const removeItem = (index: number) => {
+    if (invoice.items.length > 1) {
+      const newItems = invoice.items.filter((_, i) => i !== index);
+      updateInvoice({ items: newItems });
+    }
+  };
+
   return (
-    <InvoiceContext.Provider value={{ invoice, updateInvoice, addItem }}>
+    <InvoiceContext.Provider value={{ invoice, updateInvoice, addItem, removeItem }}>
       {children}
     </InvoiceContext.Provider>
   );
