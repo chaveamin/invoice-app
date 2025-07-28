@@ -1,8 +1,11 @@
-import React from "react";
+"use client";
+
+import React, { useState } from "react";
 import { Button } from "./ui/button";
 import { Download } from "lucide-react";
 import { Card, CardContent } from "./ui/card";
 import { useInvoice } from "@/context/invoice-context";
+import { generatePDF } from "@/utils/pdf-generator";
 
 interface InvoicePreviewProps {
   onBack: () => void;
@@ -10,6 +13,13 @@ interface InvoicePreviewProps {
 
 export default function InvoicePreview({ onBack }: InvoicePreviewProps) {
   const { invoice } = useInvoice();
+  const [pdfUrl, setPdfUrl] = useState<string | null>(null);
+
+  const handleDownloadPDF = () => {
+    const url = generatePDF(invoice);
+    setPdfUrl(url);
+  };
+
   return (
     <div className="min-h-screen bg-gray-50 p-4">
       <div className="max-w-4xl mx-auto">
@@ -19,12 +29,18 @@ export default function InvoicePreview({ onBack }: InvoicePreviewProps) {
             <Button className="cursor-pointer" variant="outline" onClick={onBack}>
               بازگشت
             </Button>
-            <Button>
-              <Download className="size-4 cursor-pointer"></Download>
+            <Button className="cursor-pointer" onClick={handleDownloadPDF}>
+              <Download className="size-4 "></Download>
               دانلود
             </Button>
           </div>
         </div>
+
+        {pdfUrl && (
+          <div className="my-4 border rounded-lg overflow-hidden">
+            <iframe src={pdfUrl} width="100%" height="600px"></iframe>
+          </div>
+        )}
 
         <Card>
           <CardContent className="p-8">
