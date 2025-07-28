@@ -53,16 +53,12 @@ export default function InvoiceItem({ item, index, canRemove }: InvoiceItemProps
   };
 
   return (
-    <div className="grid grid-cols-12 gap-4 p-4 border rounded-lg">
-      <div className="col-span-5">
+    <div className="grid items-center grid-cols-1 md:grid-cols-12 gap-4 p-4 border rounded-lg">
+      <div className="md:col-span-5 col-span-1">
         <Label>توضیحات</Label>
-        <Input
-          placeholder="توضیحات مورد"
-          value={item.desc}
-          onChange={(e) => updateItem(index, "desc", e.target.value)}
-        />
+        <Input value={item.desc} onChange={(e) => updateItem(index, "desc", e.target.value)} />
       </div>
-      <div className="col-span-2">
+      <div className="md:col-span-2 col-span-1">
         <Label>تعداد</Label>
         <Input
           type="number"
@@ -72,7 +68,7 @@ export default function InvoiceItem({ item, index, canRemove }: InvoiceItemProps
           onBlur={handleQuantityBlur}
         />
       </div>
-      <div className="col-span-2">
+      <div className="md:col-span-2 col-span-1">
         <Label>قیمت واحد</Label>
         <Input
           type="number"
@@ -83,15 +79,15 @@ export default function InvoiceItem({ item, index, canRemove }: InvoiceItemProps
           onBlur={handleRateBlur}
         />
       </div>
-      <div className="col-span-2">
+      <div className="md:col-span-2 col-span-1">
         <Label>قیمت</Label>
         <div className="h-10 px-3 py-2 bg-gray-50 border rounded-md text-[13px] flex items-center">
           {typeof item.amount === "number" ? item.amount.toLocaleString("fa-IR") : "0"} تومان
         </div>
       </div>
-      <div className="col-span-1 flex items-end">
+      <div className="md:col-span-1 col-span-1 self-end md:justify-self-start justify-self-center">
         <Button
-          className="cursor-pointer"
+          className="cursor-pointer w-2xs md:w-12"
           variant="outline"
           size="icon"
           onClick={() => removeItem(index)}

@@ -7,12 +7,9 @@ export default function ContactDetails() {
   const { invoice, updateInvoice } = useInvoice();
   return (
     <Card>
-      <CardHeader>
-        <CardTitle>فاکتور به</CardTitle>
-      </CardHeader>
       <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
         <div className="space-y-4">
-          <h3 className="font-medium">فاکتور از</h3>
+          <h3 className="font-medium">فاکتور از طرف</h3>
           <div>
             <Label htmlFor="fromName">نام</Label>
             <Input

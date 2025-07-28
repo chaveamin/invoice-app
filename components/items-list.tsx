@@ -12,8 +12,8 @@ export default function ItemsList() {
       <CardHeader className="flex items-center justify-between">
         <CardTitle>اقلام فاکتور</CardTitle>
         <Button className="cursor-pointerb" size="sm" onClick={addItem}>
-          <Plus className="size-4 ml-2"></Plus>
-          افزودن مورد
+          <Plus className="size-4"></Plus>
+          افزودن
         </Button>
       </CardHeader>
       <CardContent className="space-y-4">
