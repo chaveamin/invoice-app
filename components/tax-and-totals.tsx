@@ -1,7 +1,8 @@
+import { useInvoice } from "@/context/invoice-context";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
-import { Label } from "./ui/label";
 
 export default function TaxAndTotals() {
+  const { invoice, updateInvoice } = useInvoice();
   return (
     <Card>
       <CardHeader>
@@ -11,7 +12,7 @@ export default function TaxAndTotals() {
         <div className="space-y-2">
           <div className="flex justify-between font-bold text-lg">
             <span>قیمت کل:</span>
-            <span>320,000 تومان</span>
+            <span>{invoice.total.toLocaleString("fa-IR")} تومان</span>
           </div>
         </div>
       </CardContent>

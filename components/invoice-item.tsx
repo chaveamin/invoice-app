@@ -73,7 +73,7 @@ export default function InvoiceItem({ item, index, canRemove }: InvoiceItemProps
         />
       </div>
       <div className="col-span-2">
-        <Label>قیمت واحد (تومان)</Label>
+        <Label>قیمت واحد</Label>
         <Input
           type="number"
           min="50000"
@@ -84,9 +84,9 @@ export default function InvoiceItem({ item, index, canRemove }: InvoiceItemProps
         />
       </div>
       <div className="col-span-2">
-        <Label>قیمت (تومان)</Label>
-        <div className="h-10 px-3 py-2 bg-gray-50 border rounded-md flex items-center">
-          {typeof item.amount === "number" ? item.amount : "0"} تومان
+        <Label>قیمت</Label>
+        <div className="h-10 px-3 py-2 bg-gray-50 border rounded-md text-[13px] flex items-center">
+          {typeof item.amount === "number" ? item.amount.toLocaleString("fa-IR") : "0"} تومان
         </div>
       </div>
       <div className="col-span-1 flex items-end">
