@@ -2,34 +2,25 @@ import React from "react";
 import { Button } from "./ui/button";
 import { Download } from "lucide-react";
 import { Card, CardContent } from "./ui/card";
+import { useInvoice } from "@/context/invoice-context";
 
-export const items = [
-  {
-    id: "1",
-    desc: "طراحی وبسایت",
-    quantity: 1,
-    rate: 500,
-    amount: 500,
-  },
-  {
-    id: "2",
-    desc: "هاستینگ",
-    quantity: 1,
-    rate: 120,
-    amount: 120,
-  },
-];
+interface InvoicePreviewProps {
+  onBack: () => void;
+}
 
-export default function InvoicePreview() {
+export default function InvoicePreview({ onBack }: InvoicePreviewProps) {
+  const { invoice } = useInvoice();
   return (
     <div className="min-h-screen bg-gray-50 p-4">
       <div className="max-w-4xl mx-auto">
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-2xl font-bold">فاکتور خرید</h1>
           <div className="space-x-2 flex items-center">
-            <Button variant="outline">بازگشت</Button>
+            <Button className="cursor-pointer" variant="outline" onClick={onBack}>
+              بازگشت
+            </Button>
             <Button>
-              <Download className="size-4"></Download>
+              <Download className="size-4 cursor-pointer"></Download>
               دانلود
             </Button>
           </div>
@@ -41,10 +32,12 @@ export default function InvoicePreview() {
             <div className="flex justify-between items-start mb-8">
               <div>
                 <h2 className="text-3xl font-bold mb-2">فاکتور</h2>
-                <p className="text-gray-600">#655d5322def</p>
+                <p dir="ltr" className="text-gray-600">
+                  #{invoice.invoiceNumber}
+                </p>
               </div>
               <div className="text-left">
-                <p className="text-gray-600 text-sm font-medium">تاریخ: 1401/05/23</p>
+                <p className="text-gray-600 text-sm font-medium">تاریخ: {invoice.date}</p>
               </div>
             </div>
 
@@ -52,13 +45,13 @@ export default function InvoicePreview() {
             <div className="grid grid-cols-2 gap-8 mb-8">
               <div>
                 <h3 className="font-semibold mb-2">از:</h3>
-                <p className="font-medium">امین</p>
-                <p className="text-gray-600">amin@gmail.com</p>
+                <p className="font-medium">{invoice.fromName}</p>
+                <p className="text-gray-600">{invoice.fromEmail}</p>
               </div>
               <div>
                 <h3 className="font-semibold mb-2">به:</h3>
-                <p className="font-medium">امین</p>
-                <p className="text-gray-600">amin@gmail.com</p>
+                <p className="font-medium">{invoice.toName}</p>
+                <p className="text-gray-600">{invoice.toEmail}</p>
               </div>
             </div>
 
@@ -72,12 +65,12 @@ export default function InvoicePreview() {
                 </tr>
               </thead>
               <tbody>
-                {items.map((i) => (
+                {invoice.items.map((i) => (
                   <tr className="border-b" key={i.id}>
                     <td className="py-2">{i.desc}</td>
                     <td className="py-2 text-center">{i.quantity}</td>
                     <td className="py-2 text-left">
-                      {typeof i.amount === "number" ? i.amount.toFixed(3) : "0"} تومان
+                      {typeof i.amount === "number" ? i.amount.toLocaleString("fa-IR") : "0"} تومان
                     </td>
                   </tr>
                 ))}
@@ -89,7 +82,7 @@ export default function InvoicePreview() {
               <div className="w-full space-y-2">
                 <div className="flex justify-between font-bold text-lg">
                   <span>قیمت کل:</span>
-                  <span>136,000 تومان</span>
+                  <span>{invoice.total.toLocaleString("fa-IR")}</span>
                 </div>
               </div>
             </div>

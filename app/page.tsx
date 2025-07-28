@@ -9,7 +9,7 @@ import InvoiceForm from "@/components/invoice-form";
 export default function Home() {
   const [showPreview, setShowPreview] = useState(false);
   if (showPreview) {
-    return <InvoicePreview />;
+    return <InvoicePreview onBack={() => setShowPreview(false)} />;
   }
 
   return (

@@ -2,7 +2,7 @@ import { useInvoice } from "@/context/invoice-context";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 
 export default function TaxAndTotals() {
-  const { invoice, updateInvoice } = useInvoice();
+  const { invoice } = useInvoice();
   return (
     <Card>
       <CardHeader>
