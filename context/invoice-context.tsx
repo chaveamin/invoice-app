@@ -9,6 +9,7 @@ interface InvoiceContextType {
   updateInvoice: (updates: Partial<InvoiceData>) => void;
   addItem: () => void;
   removeItem: (index: number) => void;
+  updateItem: (index: number, field: keyof InvoiceItem, value: string | number) => void;
 }
 
 const InvoiceContext = createContext<InvoiceContextType | undefined>(undefined);
@@ -21,7 +22,7 @@ export function InvoiceProvider({ children }: { children: ReactNode }) {
     setInvoice(newInvoice);
   };
 
-  function getRandomInvId(min, max) {
+  function getRandomInvId(min: number, max: number) {
     min = Math.ceil(min);
     max = Math.floor(max);
     return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -33,6 +34,7 @@ export function InvoiceProvider({ children }: { children: ReactNode }) {
       id: randomInteger.toString(),
       desc: "",
       quantity: 1,
+      rate: 1,
       amount: 0,
     };
     updateInvoice({ items: [...invoice.items, newItem] });
@@ -45,8 +47,15 @@ export function InvoiceProvider({ children }: { children: ReactNode }) {
     }
   };
 
+  const updateItem = (index: number, field: keyof InvoiceItem, value: string | number) => {
+    const newItems = [...invoice.items];
+    newItems[index] = { ...newItems[index], [field]: value };
+    updateInvoice({ items: newItems });
+    console.log(newItems);
+  };
+
   return (
-    <InvoiceContext.Provider value={{ invoice, updateInvoice, addItem, removeItem }}>
+    <InvoiceContext.Provider value={{ invoice, updateInvoice, addItem, removeItem, updateItem }}>
       {children}
     </InvoiceContext.Provider>
   );

@@ -12,25 +12,81 @@ interface InvoiceItemProps {
 }
 
 export default function InvoiceItem({ item, index, canRemove }: InvoiceItemProps) {
-  const { removeItem } = useInvoice();
+  const { removeItem, updateItem } = useInvoice();
+
+  const handleQuantityChange = (value: string) => {
+    // Allow empty string temporarily, but conver to number for calculation
+    if (value === "") {
+      updateItem(index, "quantity", "");
+    } else {
+      const numValue = Number.parseInt(value);
+      if (!isNaN(numValue) && numValue >= 0) {
+        updateItem(index, "quantity", numValue);
+      }
+    }
+  };
+
+  const handleQuantityBlur = () => {
+    // if empty on blur, set to 1
+    if (item.quantity === "" || item.quantity === 0) {
+      updateItem(index, "quantity", 1);
+    }
+  };
+
+  const handleRateChange = (value: string) => {
+    // Allow empty string temporarily, but conver to number for calculation
+    if (value === "") {
+      updateItem(index, "rate", "");
+    } else {
+      const numValue = Number.parseFloat(value);
+      if (!isNaN(numValue) && numValue >= 0) {
+        updateItem(index, "rate", numValue);
+      }
+    }
+  };
+
+  const handleRateBlur = () => {
+    // if empty on blur, set to 1
+    if (item.rate === "") {
+      updateItem(index, "rate", 0);
+    }
+  };
+
   return (
     <div className="grid grid-cols-12 gap-4 p-4 border rounded-lg">
       <div className="col-span-5">
         <Label>توضیحات</Label>
-        <Input placeholder="توضیحات مورد" />
+        <Input
+          placeholder="توضیحات مورد"
+          value={item.desc}
+          onChange={(e) => updateItem(index, "desc", e.target.value)}
+        />
       </div>
       <div className="col-span-2">
-        <Label>مقدار</Label>
-        <Input type="number" min="1" />
+        <Label>تعداد</Label>
+        <Input
+          type="number"
+          min="1"
+          value={item.quantity}
+          onChange={(e) => handleQuantityChange(e.target.value)}
+          onBlur={handleQuantityBlur}
+        />
       </div>
       <div className="col-span-2">
-        <Label>قیمت (تومان)</Label>
-        <Input type="number" min="50000" step="50000" />
+        <Label>قیمت واحد (تومان)</Label>
+        <Input
+          type="number"
+          min="50000"
+          step="50000"
+          value={item.rate}
+          onChange={(e) => handleRateChange(e.target.value)}
+          onBlur={handleRateBlur}
+        />
       </div>
       <div className="col-span-2">
         <Label>قیمت (تومان)</Label>
         <div className="h-10 px-3 py-2 bg-gray-50 border rounded-md flex items-center">
-          1000 تومان
+          {typeof item.amount === "number" ? item.amount : "0"} تومان
         </div>
       </div>
       <div className="col-span-1 flex items-end">

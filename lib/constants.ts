@@ -1,12 +1,12 @@
-import type { InvoiceData } from "@/types/invoice"
-import moment from "moment-jalaali"
+import type { InvoiceData } from "@/types/invoice";
+import moment from "moment-jalaali";
 
 function getRandomInvId(min: number, max: number) {
-  min = Math.ceil(min)
-  max = Math.floor(max)
-  return Math.floor(Math.random() * (max - min + 1)) + min
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min + 1)) + min;
 }
-const randomInteger = getRandomInvId(1, 9999)
+const randomInteger = getRandomInvId(1, 9999);
 
 export const initialInvoiceData: InvoiceData = {
   invoiceNumber: `INV-${randomInteger}`,
@@ -15,6 +15,6 @@ export const initialInvoiceData: InvoiceData = {
   fromEmail: "",
   toName: "",
   toEmail: "",
-  items: [{ id: "1", desc: "", quantity: 1, amount: 0 }],
+  items: [{ id: "1", desc: "", quantity: 1, rate: 1, amount: 0 }],
   total: 0,
-}
+};
