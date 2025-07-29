@@ -10,20 +10,14 @@ export const generatePDF = (invoice: InvoiceData) => {
   doc.setLanguage("fa-IR");
   doc.setFont("YekanBakhFaNum-Bold", "normal", "bold");
 
-  let calculatedHeight = 10;
-
-  calculatedHeight += 20;
-  calculatedHeight += 10;
-
-  calculatedHeight += 13;
-  calculatedHeight += 10;
+  let calculatedHeight = 63;
 
   invoice.items.forEach((item) => {
     const descriptionLines = doc.splitTextToSize(item.desc, 85);
 
     const textHeight = descriptionLines.length * 5;
 
-    const rowHeight = Math.max(textHeight, 10) + 10;
+    const rowHeight = Math.max(textHeight, 10) + 20;
     calculatedHeight += rowHeight;
   });
 
@@ -38,7 +32,9 @@ export const generatePDF = (invoice: InvoiceData) => {
   doc.setTextColor(249, 250, 251);
   doc.setFontSize(14);
 
-  doc.text(invoice.toName, 80, 32);
+  doc.text(invoice.employerProjectName, 80, 29);
+  doc.setFontSize(12);
+  doc.text(new Date(invoice.date).toLocaleDateString(), 110, 37, { align: "center" });
   y += 30;
 
   doc.setDrawColor(209, 213, 219);
@@ -84,10 +80,10 @@ export const generatePDF = (invoice: InvoiceData) => {
   doc.setTextColor(249, 250, 251);
 
   y += 9;
-  doc.setFontSize(12);
-  doc.text(":مبلغ نهایی", 165, y);
+  doc.setFontSize(14);
+  doc.text(":مبلغ نهایی", 163, y);
   doc.text(`${invoice.total.toLocaleString("fa-IR")}`, 37, y);
-  doc.text("تومان", 25, y);
+  doc.text("تومان", 23, y);
 
   // Generate blob URL untuk preview
   const pdfBlob = doc.output("blob");

@@ -11,7 +11,7 @@ export default function BasicDetails() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>جزئیات فاکتور</CardTitle>
+        <CardTitle className="font-bold">جزئیات فاکتور</CardTitle>
       </CardHeader>
       <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>

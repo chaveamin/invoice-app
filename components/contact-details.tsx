@@ -9,47 +9,45 @@ export default function ContactDetails() {
     <Card>
       <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
         <div className="space-y-4">
-          <h3 className="font-medium">فاکتور از طرف</h3>
+          <h3 className="font-bold">کارگزار</h3>
           <div>
-            <Label htmlFor="fromName">نام</Label>
+            <Label htmlFor="employeeName">نام</Label>
             <Input
-              id="fromName"
+              id="employeeName"
               placeholder="نام شرکت"
               type="name"
-              value={invoice.fromName}
-              onChange={(e) => updateInvoice({ fromName: e.target.value })}
+              value={invoice.employeeName}
+              onChange={(e) => updateInvoice({ employeeName: e.target.value })}
             />
           </div>
           <div>
-            <Label htmlFor="fromEmail">آدرس ایمیل</Label>
+            <Label htmlFor="employeeWebsite">آدرس وبسایت</Label>
             <Input
-              value={invoice.fromEmail}
-              onChange={(e) => updateInvoice({ fromEmail: e.target.value })}
-              id="fromEmail"
-              placeholder="ایمیل شرکت"
-              type="email"
+              value={invoice.employeeWebsite}
+              onChange={(e) => updateInvoice({ employeeWebsite: e.target.value })}
+              id="employeeWebsite"
+              placeholder="وبسایت"
+              type="text"
             />
           </div>
         </div>
         <div className="space-y-4">
-          <h3 className="font-medium">فاکتور به</h3>
+          <h3 className="font-bold">کارفرما</h3>
           <div>
-            <Label htmlFor="toName">نام مشتری</Label>
+            <Label htmlFor="employerProjectName">عنوان پروژه</Label>
             <Input
-              value={invoice.toName}
-              onChange={(e) => updateInvoice({ toName: e.target.value })}
-              id="toName"
-              placeholder="نام مشتری"
+              value={invoice.employerProjectName}
+              onChange={(e) => updateInvoice({ employerProjectName: e.target.value })}
+              id="employerProjectName"
               type="name"
             />
           </div>
           <div>
-            <Label htmlFor="toEmail">آدرس ایمیل</Label>
+            <Label htmlFor="employerWebsite">آدرس وبسایت</Label>
             <Input
-              value={invoice.toEmail}
-              onChange={(e) => updateInvoice({ toEmail: e.target.value })}
-              id="toEmail"
-              placeholder="ایمیل مشتری"
+              value={invoice.employerWebsite}
+              onChange={(e) => updateInvoice({ employerWebsite: e.target.value })}
+              id="employerWebsite"
               type="email"
             />
           </div>

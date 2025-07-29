@@ -27,7 +27,10 @@ export default function Home() {
       </div>
       <footer className="p-4 border-t border-t-gray-200 bg-gray-50 flex items-center justify-between">
         <p className="font-medium text-slate-800">
-          طراحی و توسعه توسط <a href="#">امین چاوه پور</a>
+          طراحی و توسعه توسط{" "}
+          <a target="_blank" href="https://github.com/chaveamin/">
+            امین چاوه پور
+          </a>
         </p>
         <a href="https://github.com/chaveamin/invoice-app" target="_blank">
           <svg className="size-7" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">

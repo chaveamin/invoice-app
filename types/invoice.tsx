@@ -9,10 +9,10 @@ export interface InvoiceItem {
 export interface InvoiceData {
   invoiceNumber: string;
   date: string;
-  fromName: string;
-  fromEmail: string;
-  toName: string;
-  toEmail: string;
+  employeeName: string;
+  employeeWebsite: string;
+  employerProjectName: string;
+  employerWebsite: string;
   items: InvoiceItem[];
   total: number;
 }

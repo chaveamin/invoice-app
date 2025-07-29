@@ -31,7 +31,7 @@ export default function InvoicePreview({ onBack }: InvoicePreviewProps) {
             </Button>
             <Button className="cursor-pointer" onClick={handleDownloadPDF}>
               <Download className="size-4 "></Download>
-              دانلود
+              نمایش و دانلود
             </Button>
           </div>
         </div>
@@ -61,13 +61,13 @@ export default function InvoicePreview({ onBack }: InvoicePreviewProps) {
             <div className="grid grid-cols-2 gap-8 mb-8">
               <div>
                 <h3 className="font-semibold mb-2">از:</h3>
-                <p className="font-medium">{invoice.fromName}</p>
-                <p className="text-gray-600">{invoice.fromEmail}</p>
+                <p className="font-medium">{invoice.employeeName}</p>
+                <p className="text-gray-600">{invoice.employeeWebsite}</p>
               </div>
               <div>
                 <h3 className="font-semibold mb-2">به:</h3>
-                <p className="font-medium">{invoice.toName}</p>
-                <p className="text-gray-600">{invoice.toEmail}</p>
+                <p className="font-medium">{invoice.employerProjectName}</p>
+                <p className="text-gray-600">{invoice.employerWebsite}</p>
               </div>
             </div>
 
