@@ -17,7 +17,7 @@ export const generatePDF = (invoice: InvoiceData) => {
 
     const textHeight = descriptionLines.length * 5;
 
-    const rowHeight = Math.max(textHeight, 10) + 20;
+    const rowHeight = Math.max(textHeight, 10) + 15;
     calculatedHeight += rowHeight;
   });
 
@@ -30,9 +30,11 @@ export const generatePDF = (invoice: InvoiceData) => {
   doc.setFillColor(37, 99, 235);
   doc.roundedRect(20, y, 170, 20, 4, 4, "FD");
   doc.setTextColor(249, 250, 251);
-  doc.setFontSize(14);
+  doc.setFontSize(13);
 
-  doc.text(invoice.employerProjectName, 80, 29);
+  doc.text(`${invoice.employerWebsite} / ${invoice.employerProjectName}`, 105, 29, {
+    align: "center",
+  });
   doc.setFontSize(12);
   doc.text(new Date(invoice.date).toLocaleDateString(), 110, 37, { align: "center" });
   y += 30;

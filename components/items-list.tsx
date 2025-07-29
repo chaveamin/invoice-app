@@ -10,7 +10,7 @@ export default function ItemsList() {
   return (
     <Card>
       <CardHeader className="flex items-center justify-between">
-        <CardTitle>اقلام فاکتور</CardTitle>
+        <CardTitle>اقلام فاکتور ({invoice.items.length})</CardTitle>
         <Button className="cursor-pointerb" size="sm" onClick={addItem}>
           <Plus className="size-4"></Plus>
           افزودن
