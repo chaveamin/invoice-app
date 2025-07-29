@@ -16,7 +16,7 @@ export default function ItemsList() {
           افزودن
         </Button>
       </CardHeader>
-      <CardContent className="space-y-4">
+      <CardContent>
         {invoice.items.map((item, index) => (
           <InvoiceItem
             key={item.id}

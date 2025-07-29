@@ -4,67 +4,94 @@ import "@/utils/YekanBakhFaNum-Bold-bold";
 
 export const generatePDF = (invoice: InvoiceData) => {
   const doc = new jsPDF();
-  let y = 30;
+  const startY = 10;
+  let y = startY;
 
-  // Title
   doc.setLanguage("fa-IR");
   doc.setFont("YekanBakhFaNum-Bold", "normal", "bold");
-  doc.setFontSize(24);
-  doc.text("فاکتور", 150, y);
-  doc.setFontSize(12);
-  doc.text(`#${invoice.invoiceNumber}`, 20, y);
-  y += 20;
 
-  // Date
-  doc.text(`تاریخ: ${new Date(invoice.date).toLocaleDateString()}`, 20, y);
-  y += 20;
+  let calculatedHeight = 10;
 
-  // From/To
-  doc.setFontSize(14);
-  doc.text("از طرف", 120, y);
-  doc.text("به", 20, y);
-  y += 20;
+  calculatedHeight += 20;
+  calculatedHeight += 10;
 
-  doc.setFontSize(10);
-  doc.text(invoice.fromName, 20, y);
-  doc.text(invoice.toName, 120, y);
-  y += 6;
-  doc.text(invoice.fromEmail, 20, y);
-  doc.text(invoice.toEmail, 120, y);
-  y += 20;
+  calculatedHeight += 13;
+  calculatedHeight += 10;
 
-  // Items Header
-  doc.setFontSize(10);
-  doc.text("توضیحات", 176, y);
-  doc.text("تعداد", 140, y);
-  doc.text("قیمت واحد", 120, y);
-  doc.text("قیمت", 20, y);
-  y += 5;
-  doc.line(20, y, 190, y);
-  y += 10;
+  invoice.items.forEach((item) => {
+    const descriptionLines = doc.splitTextToSize(item.desc, 85);
 
-  // Items
-  invoice.items.forEach((i) => {
-    doc.text(i.desc, 176, y);
-    doc.text(i.quantity.toString(), 140, y);
-    doc.text(`${Number(i.rate).toLocaleString("fa-IR")}`, 120, y);
-    doc.text(`${i.amount.toLocaleString("fa-IR")}`, 20, y);
-    y += 8;
+    const textHeight = descriptionLines.length * 5;
+
+    const rowHeight = Math.max(textHeight, 10) + 10;
+    calculatedHeight += rowHeight;
   });
 
+  doc.setDrawColor(229, 231, 235);
+  doc.setFillColor(255, 255, 255);
+  doc.roundedRect(10, y, 190, calculatedHeight, 6, 6, "FD");
   y += 10;
-  doc.line(140, y, 190, y);
-  y += 10;
+
+  doc.setDrawColor(255, 255, 255);
+  doc.setFillColor(37, 99, 235);
+  doc.roundedRect(20, y, 170, 20, 4, 4, "FD");
+  doc.setTextColor(249, 250, 251);
+  doc.setFontSize(14);
+
+  doc.text(invoice.toName, 80, 32);
+  y += 30;
+
+  doc.setDrawColor(209, 213, 219);
+
+  doc.setDrawColor(255, 255, 255);
+  doc.setFillColor(249, 250, 251);
+  doc.roundedRect(20, 44, 170, 10, 2.5, 2.5, "FD");
+
+  doc.setFontSize(12);
+  doc.setTextColor(107, 114, 128);
+  doc.text("توضیحات", 170, y);
+  doc.text("تعداد", 140, y);
+  doc.text("قیمت واحد", 100, y);
+  doc.text("قیمت", 25, y);
+  y += 13;
+
+  invoice.items.forEach((item) => {
+    const startOfRowY = y;
+    doc.setTextColor(17, 24, 39);
+
+    const descriptionLines = doc.splitTextToSize(item.desc, 85);
+    const textHeight = descriptionLines.length * 5;
+    const rowHeight = Math.max(textHeight, 1);
+
+    doc.text(descriptionLines, 187, startOfRowY, { align: "right" });
+    doc.text(item.quantity.toString(), 145, startOfRowY);
+    doc.text(`${Number(item.rate).toLocaleString("fa-IR")}`, 100, startOfRowY);
+    doc.text(`${item.amount.toLocaleString("fa-IR")}`, 25, startOfRowY);
+
+    y += rowHeight;
+
+    y += 3;
+    doc.setDrawColor(229, 231, 235);
+    doc.line(20, y, 190, y);
+    y += 7;
+  });
 
   // Totals
+
+  doc.setDrawColor(255, 255, 255);
+  doc.setFillColor(37, 99, 235);
+  doc.roundedRect(20, y, 170, 15, 2.5, 2.5, "FD");
+  doc.setTextColor(249, 250, 251);
+
+  y += 9;
   doc.setFontSize(12);
-  doc.text(":مبلغ نهایی", 170, y);
-  doc.text(`${invoice.total.toLocaleString("fa-IR")}`, 153, y);
-  doc.text("تومان", 141, y);
+  doc.text(":مبلغ نهایی", 165, y);
+  doc.text(`${invoice.total.toLocaleString("fa-IR")}`, 37, y);
+  doc.text("تومان", 25, y);
 
   // Generate blob URL untuk preview
-  //   const pdfBlob = doc.output("blob");
-  //   return URL.createObjectURL(pdfBlob);
+  const pdfBlob = doc.output("blob");
+  return URL.createObjectURL(pdfBlob);
 
-  doc.save(`${invoice.invoiceNumber}.pdf`);
+  // doc.save(`${invoice.invoiceNumber}.pdf`);
 };

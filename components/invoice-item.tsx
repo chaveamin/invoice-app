@@ -53,7 +53,7 @@ export default function InvoiceItem({ item, index, canRemove }: InvoiceItemProps
   };
 
   return (
-    <div className="grid items-center grid-cols-1 md:grid-cols-12 gap-4 p-4 border rounded-lg">
+    <div className="grid items-center grid-cols-1 md:grid-cols-12 gap-4 p-4 border-b">
       <div className="md:col-span-5 col-span-1">
         <Label>توضیحات</Label>
         <Input value={item.desc} onChange={(e) => updateItem(index, "desc", e.target.value)} />
