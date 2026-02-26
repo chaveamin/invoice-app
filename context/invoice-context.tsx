@@ -10,7 +10,11 @@ interface InvoiceContextType {
   updateInvoice: (updates: Partial<InvoiceData>) => void;
   addItem: () => void;
   removeItem: (index: number) => void;
-  updateItem: (index: number, field: keyof InvoiceItem, value: string | number) => void;
+  updateItem: (
+    index: number,
+    field: keyof InvoiceItem,
+    value: string | number,
+  ) => void;
 }
 
 const InvoiceContext = createContext<InvoiceContextType | undefined>(undefined);
@@ -21,8 +25,20 @@ export function InvoiceProvider({ children }: { children: ReactNode }) {
   const updateInvoice = (updates: Partial<InvoiceData>) => {
     const newInvoice = { ...invoice, ...updates };
 
-    if (updates.items !== undefined) {
-      const { total } = calculateTotals(updates.items || invoice.items);
+    if (updates.items !== undefined || updates.taxEnabled !== undefined) {
+      const itemsToUse = updates.items || invoice.items;
+      const taxToUse =
+        updates.taxEnabled !== undefined
+          ? updates.taxEnabled
+          : invoice.taxEnabled;
+
+      const { subtotal, taxAmount, total } = calculateTotals(
+        itemsToUse,
+        taxToUse,
+      );
+
+      newInvoice.subtotal = subtotal;
+      newInvoice.taxAmount = taxAmount;
       newInvoice.total = total;
     }
 
@@ -54,7 +70,11 @@ export function InvoiceProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  const updateItem = (index: number, field: keyof InvoiceItem, value: string | number) => {
+  const updateItem = (
+    index: number,
+    field: keyof InvoiceItem,
+    value: string | number,
+  ) => {
     const newItems = [...invoice.items];
     newItems[index] = { ...newItems[index], [field]: value };
 
@@ -83,7 +103,9 @@ export function InvoiceProvider({ children }: { children: ReactNode }) {
   };
 
   return (
-    <InvoiceContext.Provider value={{ invoice, updateInvoice, addItem, removeItem, updateItem }}>
+    <InvoiceContext.Provider
+      value={{ invoice, updateInvoice, addItem, removeItem, updateItem }}
+    >
       {children}
     </InvoiceContext.Provider>
   );

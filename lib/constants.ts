@@ -15,5 +15,8 @@ export const initialInvoiceData: InvoiceData = {
   employerProjectName: "",
   employerWebsite: "",
   items: [{ id: "1", desc: "", quantity: 1, rate: 1, amount: 0 }],
+  subtotal: 0,
+  taxEnabled: false,
+  taxAmount: 0,
   total: 0,
 };

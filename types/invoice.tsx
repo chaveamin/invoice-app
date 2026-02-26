@@ -14,5 +14,8 @@ export interface InvoiceData {
   employerProjectName: string;
   employerWebsite: string;
   items: InvoiceItem[];
+  subtotal: number;
+  taxEnabled: boolean;
+  taxAmount: number;
   total: number;
 }

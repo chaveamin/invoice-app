@@ -61,6 +61,21 @@ export const generatePDF = (invoice: InvoiceData) => {
     y += 7;
   });
 
+  if (invoice.taxEnabled) {
+    doc.setTextColor(107, 114, 128);
+    doc.setFontSize(11);
+
+    doc.text(":جمع کل", 190, y, { align: "right" });
+    doc.text(`${(invoice.subtotal || 0).toLocaleString("fa-IR")}`, 37, y);
+    doc.text("تومان", 23, y);
+    y += 7;
+
+    doc.text(":مالیات (10%)", 190, y, { align: "right" });
+    doc.text(`${(invoice.taxAmount || 0).toLocaleString("fa-IR")}`, 37, y);
+    doc.text("تومان", 23, y);
+    y += 7;
+  }
+
   doc.setDrawColor(255, 255, 255);
   doc.setFillColor(37, 99, 235);
   doc.roundedRect(20, y, 170, 15, 2.5, 2.5, "FD");
