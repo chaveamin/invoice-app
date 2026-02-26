@@ -3,7 +3,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useInvoice } from "@/context/invoice-context";
 import DatePicker from "./ui/DatePicker";
-import moment from "moment-jalaali";
 
 export default function BasicDetails() {
   const { invoice, updateInvoice } = useInvoice();
@@ -28,14 +27,10 @@ export default function BasicDetails() {
           <Label className="mb-3" htmlFor="date">
             تاریخ
           </Label>
-
           <DatePicker
             value={invoice.date}
-            onChange={(dateOBJ) => {
-              const date = dateOBJ
-                ? moment(dateOBJ.toDate()).locale("en").format("jYYYY/jMM/jDD")
-                : undefined;
-              updateInvoice({ date });
+            onChange={(date) => {
+              updateInvoice({ date: date ? date.toISOString() : undefined });
             }}
           />
         </div>

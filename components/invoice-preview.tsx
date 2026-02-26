@@ -6,6 +6,7 @@ import { Download } from "lucide-react";
 import { Card, CardContent } from "./ui/card";
 import { useInvoice } from "@/context/invoice-context";
 import { generatePDF } from "@/utils/pdf-generator";
+import { formatDate } from "@/utils/formatters";
 
 interface InvoicePreviewProps {
   onBack: () => void;
@@ -26,7 +27,11 @@ export default function InvoicePreview({ onBack }: InvoicePreviewProps) {
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-2xl font-bold">فاکتور خرید</h1>
           <div className="space-x-2 flex items-center">
-            <Button className="cursor-pointer" variant="outline" onClick={onBack}>
+            <Button
+              className="cursor-pointer"
+              variant="outline"
+              onClick={onBack}
+            >
               بازگشت
             </Button>
             <Button className="cursor-pointer" onClick={handleDownloadPDF}>
@@ -53,7 +58,9 @@ export default function InvoicePreview({ onBack }: InvoicePreviewProps) {
                 </p>
               </div>
               <div className="text-left">
-                <p className="text-gray-600 text-sm font-medium">تاریخ: {invoice.date}</p>
+                <p className="text-gray-600 text-sm font-medium">
+                  تاریخ: {formatDate(invoice.date)}
+                </p>
               </div>
             </div>
 
@@ -86,7 +93,10 @@ export default function InvoicePreview({ onBack }: InvoicePreviewProps) {
                     <td className="py-2">{i.desc}</td>
                     <td className="py-2 text-center">{i.quantity}</td>
                     <td className="py-2 text-left">
-                      {typeof i.amount === "number" ? i.amount.toLocaleString("fa-IR") : "0"} تومان
+                      {typeof i.amount === "number"
+                        ? i.amount.toLocaleString("fa-IR")
+                        : "0"}{" "}
+                      تومان
                     </td>
                   </tr>
                 ))}

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import localFont from "next/font/local";
 import { InvoiceProvider } from "@/context/invoice-context";
+import { DirectionProvider } from "@/components/ui/direction";
 
 const bakh = localFont({
   src: "./YekanBakh.woff2",
@@ -21,7 +22,9 @@ export default function RootLayout({
   return (
     <html lang="fa" dir="rtl">
       <InvoiceProvider>
-        <body className={bakh.className}>{children}</body>
+        <body className={bakh.className}>
+          <DirectionProvider dir="rtl">{children}</DirectionProvider>
+        </body>
       </InvoiceProvider>
     </html>
   );

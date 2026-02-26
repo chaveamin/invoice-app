@@ -18,16 +18,20 @@ export default function ContactDetails() {
               type="name"
               value={invoice.employeeName}
               onChange={(e) => updateInvoice({ employeeName: e.target.value })}
+              disabled
             />
           </div>
           <div>
             <Label htmlFor="employeeWebsite">آدرس وبسایت</Label>
             <Input
               value={invoice.employeeWebsite}
-              onChange={(e) => updateInvoice({ employeeWebsite: e.target.value })}
+              onChange={(e) =>
+                updateInvoice({ employeeWebsite: e.target.value })
+              }
               id="employeeWebsite"
               placeholder="وبسایت"
               type="text"
+              disabled
             />
           </div>
         </div>
@@ -37,7 +41,9 @@ export default function ContactDetails() {
             <Label htmlFor="employerProjectName">عنوان پروژه</Label>
             <Input
               value={invoice.employerProjectName}
-              onChange={(e) => updateInvoice({ employerProjectName: e.target.value })}
+              onChange={(e) =>
+                updateInvoice({ employerProjectName: e.target.value })
+              }
               id="employerProjectName"
               type="name"
             />
@@ -46,7 +52,9 @@ export default function ContactDetails() {
             <Label htmlFor="employerWebsite">آدرس وبسایت</Label>
             <Input
               value={invoice.employerWebsite}
-              onChange={(e) => updateInvoice({ employerWebsite: e.target.value })}
+              onChange={(e) =>
+                updateInvoice({ employerWebsite: e.target.value })
+              }
               id="employerWebsite"
               type="email"
             />

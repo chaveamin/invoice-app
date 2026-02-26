@@ -1,5 +1,6 @@
 import { InvoiceData } from "@/types/invoice";
 import { jsPDF } from "jspdf";
+import { formatDate } from "@/utils/formatters";
 import "@/utils/YekanBakhFaNum-Bold-bold";
 
 export const generatePDF = (invoice: InvoiceData) => {
@@ -20,11 +21,16 @@ export const generatePDF = (invoice: InvoiceData) => {
   doc.setTextColor(249, 250, 251);
   doc.setFontSize(13);
 
-  doc.text(`${invoice.employerWebsite} / ${invoice.employerProjectName}`, 105, 29, {
-    align: "center",
-  });
+  doc.text(
+    `${invoice.employerWebsite} / ${invoice.employerProjectName}`,
+    105,
+    29,
+    {
+      align: "center",
+    },
+  );
   doc.setFontSize(12);
-  doc.text(new Date(invoice.date).toLocaleDateString(), 110, 37, { align: "center" });
+  doc.text(formatDate(invoice.date), 110, 37, { align: "center" });
   y += 30;
 
   doc.setDrawColor(209, 213, 219);
@@ -74,9 +80,13 @@ export const generatePDF = (invoice: InvoiceData) => {
   doc.roundedRect(20, y, 170, 50, 3, 3, "FD");
   doc.setTextColor(107, 114, 128);
   y += 10;
-  doc.text("قبل از شروع کار 50 درصدر از کل مبلغ فاکتور پرداخت میشود", 185, y, { align: "right" });
+  doc.text("قبل از شروع کار 50 درصدر از کل مبلغ فاکتور پرداخت میشود", 185, y, {
+    align: "right",
+  });
   y += 10;
-  doc.text("جهت مشاهده پیشرفت پروژه; کار در ورسل آپلود میشود", 185, y, { align: "right" });
+  doc.text("جهت مشاهده پیشرفت پروژه; کار در ورسل آپلود میشود", 185, y, {
+    align: "right",
+  });
   y += 10;
   doc.setLineHeightFactor(2);
   const textContent =
