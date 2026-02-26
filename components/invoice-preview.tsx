@@ -2,11 +2,10 @@
 
 import { useState } from "react";
 import { Button } from "./ui/button";
-import { Download } from "lucide-react";
+import { Download, Eye } from "lucide-react";
 import { Card, CardContent } from "./ui/card";
 import { useInvoice } from "@/context/invoice-context";
 import { generatePDF } from "@/utils/pdf-generator";
-import { formatDate } from "@/utils/formatters";
 
 interface InvoicePreviewProps {
   onBack: () => void;
@@ -16,17 +15,38 @@ export default function InvoicePreview({ onBack }: InvoicePreviewProps) {
   const { invoice } = useInvoice();
   const [pdfUrl, setPdfUrl] = useState<string | null>(null);
 
-  const handleDownloadPDF = () => {
+  const handlePreviewPDF = () => {
     const url = generatePDF(invoice);
     setPdfUrl(url);
   };
+
+  const handleDownloadPDF = () => {
+    const url = pdfUrl || generatePDF(invoice);
+
+    const link = document.createElement("a");
+    link.href = url;
+
+    link.download = `${invoice.invoiceNumber}.pdf`;
+
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  const formattedDate = new Intl.DateTimeFormat("fa-IR", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  }).format(new Date(invoice.date));
 
   return (
     <div className="min-h-screen bg-gray-50 p-4">
       <div className="max-w-4xl mx-auto">
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-2xl font-bold">فاکتور خرید</h1>
-          <div className="space-x-2 flex items-center">
+
+          {/* Action Buttons */}
+          <div className="flex items-center gap-2">
             <Button
               className="cursor-pointer"
               variant="outline"
@@ -34,13 +54,16 @@ export default function InvoicePreview({ onBack }: InvoicePreviewProps) {
             >
               بازگشت
             </Button>
-            <Button className="cursor-pointer" onClick={handleDownloadPDF}>
-              <Download className="size-4 "></Download>
-              نمایش و دانلود
+            <Button onClick={handlePreviewPDF}>
+              <Eye />
+            </Button>
+            <Button variant="outline" size="icon" onClick={handleDownloadPDF}>
+              <Download />
             </Button>
           </div>
         </div>
 
+        {/* PDF Iframe */}
         {pdfUrl && (
           <div className="my-4 border rounded-lg overflow-hidden">
             <iframe src={pdfUrl} width="100%" height="600px"></iframe>
@@ -59,7 +82,7 @@ export default function InvoicePreview({ onBack }: InvoicePreviewProps) {
               </div>
               <div className="text-left">
                 <p className="text-gray-600 text-sm font-medium">
-                  تاریخ: {formatDate(invoice.date)}
+                  تاریخ: {formattedDate}
                 </p>
               </div>
             </div>
@@ -79,7 +102,7 @@ export default function InvoicePreview({ onBack }: InvoicePreviewProps) {
             </div>
 
             {/* Items Table */}
-            <table className="w-full mb-8">
+            <table className="w-full mb-16">
               <thead>
                 <tr className="border-b-2">
                   <th className="text-right py-2">توضیحات</th>
@@ -103,12 +126,31 @@ export default function InvoicePreview({ onBack }: InvoicePreviewProps) {
               </tbody>
             </table>
 
-            {/* Total */}
-            <div className="flex justify-start">
-              <div className="w-full space-y-2">
+            {/* Totals Section */}
+            <div className="flex justify-end">
+              <div className="w-full space-y-3">
+                {/* Conditionally render Tax and Subtotal in the HTML preview if enabled */}
+                {invoice.taxEnabled && (
+                  <>
+                    <div className="flex justify-between text-muted-foreground text-sm">
+                      <span>جمع کل:</span>
+                      <span>
+                        {(invoice.subtotal || 0).toLocaleString("fa-IR")} تومان
+                      </span>
+                    </div>
+                    <div className="flex justify-between text-muted-foreground text-sm">
+                      <span>مالیات (10%):</span>
+                      <span>
+                        {(invoice.taxAmount || 0).toLocaleString("fa-IR")} تومان
+                      </span>
+                    </div>
+                    <hr />
+                  </>
+                )}
+
                 <div className="flex justify-between font-bold text-lg">
-                  <span>قیمت کل:</span>
-                  <span>{invoice.total.toLocaleString("fa-IR")}</span>
+                  <span>مبلغ نهایی:</span>
+                  <span>{invoice.total.toLocaleString("fa-IR")} تومان</span>
                 </div>
               </div>
             </div>

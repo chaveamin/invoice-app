@@ -4,7 +4,7 @@ import { formatDate } from "@/utils/formatters";
 import "@/utils/YekanBakhFaNum-Bold-bold";
 
 export const generatePDF = (invoice: InvoiceData) => {
-  const doc = new jsPDF("p", "mm", [210, 390]);
+  const doc = new jsPDF("p", "mm", [210, 500]);
   let y = 10;
 
   doc.setLanguage("fa-IR");
@@ -12,7 +12,7 @@ export const generatePDF = (invoice: InvoiceData) => {
 
   doc.setDrawColor(229, 231, 235);
   doc.setFillColor(255, 255, 255);
-  doc.roundedRect(10, y, 190, 370, 6, 6, "FD");
+  doc.roundedRect(10, y, 190, 480, 6, 6, "FD");
   y += 10;
 
   doc.setDrawColor(255, 255, 255);
@@ -113,6 +113,4 @@ export const generatePDF = (invoice: InvoiceData) => {
   // Generate blob URL untuk preview
   const pdfBlob = doc.output("blob");
   return URL.createObjectURL(pdfBlob);
-
-  // doc.save(`${invoice.invoiceNumber}.pdf`);
 };
