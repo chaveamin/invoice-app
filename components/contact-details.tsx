@@ -9,9 +9,11 @@ export default function ContactDetails() {
     <Card>
       <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
         <div className="space-y-4">
-          <h3 className="font-bold">کارگزار</h3>
+          <h3 className="font-bold text-xl">کارگزار</h3>
           <div>
-            <Label htmlFor="employeeName">نام</Label>
+            <Label className="text-base font-semibold" htmlFor="employeeName">
+              نام
+            </Label>
             <Input
               id="employeeName"
               placeholder="نام شرکت"
@@ -22,7 +24,12 @@ export default function ContactDetails() {
             />
           </div>
           <div>
-            <Label htmlFor="employeeWebsite">آدرس وبسایت</Label>
+            <Label
+              className="text-base font-semibold"
+              htmlFor="employeeWebsite"
+            >
+              آدرس وبسایت
+            </Label>
             <Input
               value={invoice.employeeWebsite}
               onChange={(e) =>
@@ -36,9 +43,14 @@ export default function ContactDetails() {
           </div>
         </div>
         <div className="space-y-4">
-          <h3 className="font-bold">کارفرما</h3>
+          <h3 className="font-bold text-xl">کارفرما</h3>
           <div>
-            <Label htmlFor="employerProjectName">عنوان پروژه</Label>
+            <Label
+              className="text-base font-semibold"
+              htmlFor="employerProjectName"
+            >
+              عنوان پروژه
+            </Label>
             <Input
               value={invoice.employerProjectName}
               onChange={(e) =>
@@ -49,7 +61,12 @@ export default function ContactDetails() {
             />
           </div>
           <div>
-            <Label htmlFor="employerWebsite">آدرس وبسایت</Label>
+            <Label
+              className="text-base font-semibold"
+              htmlFor="employerWebsite"
+            >
+              آدرس وبسایت
+            </Label>
             <Input
               value={invoice.employerWebsite}
               onChange={(e) =>

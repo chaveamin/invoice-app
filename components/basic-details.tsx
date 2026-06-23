@@ -10,11 +10,14 @@ export default function BasicDetails() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="font-bold">جزئیات فاکتور</CardTitle>
+        <CardTitle className="font-bold text-xl">جزئیات فاکتور</CardTitle>
       </CardHeader>
       <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
-          <Label className="mb-3" htmlFor="invoiceNumber">
+          <Label
+            className="mb-3 text-base font-semibold"
+            htmlFor="invoiceNumber"
+          >
             شماره فاکتور
           </Label>
           <Input
@@ -24,7 +27,7 @@ export default function BasicDetails() {
           />
         </div>
         <div>
-          <Label className="mb-3" htmlFor="date">
+          <Label className="mb-3 text-base font-semibold" htmlFor="date">
             تاریخ
           </Label>
           <DatePicker

@@ -37,7 +37,7 @@ export default function TaxAndTotals() {
 
           <hr />
 
-          <div className="flex justify-between font-bold text-lg">
+          <div className="flex justify-between font-bold text-xl">
             <span>مبلغ نهایی:</span>
             <span>{invoice.total.toLocaleString("fa-IR")} تومان</span>
           </div>

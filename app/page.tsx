@@ -3,7 +3,6 @@
 import { useState } from "react";
 import InvoicePreview from "@/components/invoice-preview";
 import { Button } from "@/components/ui/button";
-import { Eye } from "lucide-react";
 import InvoiceForm from "@/components/invoice-form";
 
 export default function Home() {
@@ -19,10 +18,10 @@ export default function Home() {
           <InvoiceForm></InvoiceForm>
           <div className="flex items-center justify-center mt-6">
             <Button
-              className="cursor-pointer w-xs"
+              className="cursor-pointer w-full text-lg rounded-lg"
+              size="lg"
               onClick={() => setShowPreview(true)}
             >
-              <Eye className="size-4"></Eye>
               پیشنمایش
             </Button>
           </div>
