@@ -3,9 +3,10 @@ import { Card, CardContent } from "./ui/card";
 import { Label } from "./ui/label";
 import { Switch } from "./ui/switch";
 import { Input } from "./ui/input";
+import { Button } from "./ui/button";
 
 export default function TaxAndTotals() {
-  const { invoice, updateInvoice } = useInvoice();
+  const { invoice, updateInvoice, clearDraft } = useInvoice();
 
   return (
     <Card>
@@ -110,6 +111,15 @@ export default function TaxAndTotals() {
           <div className="flex justify-between font-bold text-xl">
             <span>مبلغ نهایی:</span>
             <span>{(invoice.total || 0).toLocaleString("fa-IR")} تومان</span>
+          </div>
+
+          <div className="pt-2">
+            <Button
+              className="w-full cursor-pointer bg-red-500/15 text-red-700 hover:bg-red-500/20"
+              onClick={clearDraft}
+            >
+              پاکسازی پیش‌نویس
+            </Button>
           </div>
         </div>
       </CardContent>

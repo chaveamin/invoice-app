@@ -3,7 +3,13 @@
 import { initialInvoiceData } from "@/lib/constants";
 import { InvoiceData, InvoiceItem } from "@/types/invoice";
 import { calculateTotals } from "@/utils/calculation";
-import { createContext, ReactNode, useContext, useState } from "react";
+import {
+  createContext,
+  ReactNode,
+  useContext,
+  useState,
+  useEffect,
+} from "react";
 
 interface InvoiceContextType {
   invoice: InvoiceData;
@@ -15,12 +21,37 @@ interface InvoiceContextType {
     field: keyof InvoiceItem,
     value: string | number,
   ) => void;
+  clearDraft: () => void;
 }
 
 const InvoiceContext = createContext<InvoiceContextType | undefined>(undefined);
 
 export function InvoiceProvider({ children }: { children: ReactNode }) {
   const [invoice, setInvoice] = useState<InvoiceData>(initialInvoiceData);
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  useEffect(() => {
+    const savedDraft = localStorage.getItem("invoice-draft");
+    if (savedDraft) {
+      try {
+        setInvoice(JSON.parse(savedDraft));
+      } catch (e) {
+        console.error("Failed to parse invoice draft from localStorage", e);
+      }
+    }
+    setIsLoaded(true);
+  }, []);
+
+  useEffect(() => {
+    if (isLoaded) {
+      localStorage.setItem("invoice-draft", JSON.stringify(invoice));
+    }
+  }, [invoice, isLoaded]);
+
+  const clearDraft = () => {
+    localStorage.removeItem("invoice-draft");
+    setInvoice(initialInvoiceData);
+  };
 
   const updateInvoice = (updates: Partial<InvoiceData>) => {
     const newInvoice = { ...invoice, ...updates };
@@ -123,7 +154,14 @@ export function InvoiceProvider({ children }: { children: ReactNode }) {
 
   return (
     <InvoiceContext.Provider
-      value={{ invoice, updateInvoice, addItem, removeItem, updateItem }}
+      value={{
+        invoice,
+        updateInvoice,
+        addItem,
+        removeItem,
+        updateItem,
+        clearDraft,
+      }}
     >
       {children}
     </InvoiceContext.Provider>

@@ -61,7 +61,6 @@ export const generatePDF = (invoice: InvoiceData) => {
     y += 7;
   });
 
-  // Print breakdown if there is Tax OR a Discount
   if (
     invoice.taxEnabled ||
     (invoice.discountAmount && invoice.discountAmount > 0)
@@ -91,11 +90,6 @@ export const generatePDF = (invoice: InvoiceData) => {
     ) {
       doc.setTextColor(107, 114, 128);
       doc.setFontSize(11);
-
-      doc.text(":جمع کل", 190, y, { align: "right" });
-      doc.text(`${(invoice.subtotal || 0).toLocaleString("fa-IR")}`, 37, y);
-      doc.text("تومان", 23, y);
-      y += 7;
 
       if (invoice.discountAmount > 0) {
         doc.text(":تخفیف", 190, y, { align: "right" });
