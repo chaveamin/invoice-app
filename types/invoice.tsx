@@ -23,3 +23,9 @@ export interface InvoiceData {
   taxAmount: number;
   total: number;
 }
+
+export interface InvoiceTemplate {
+  id: string;
+  name: string;
+  data: InvoiceData;
+}
