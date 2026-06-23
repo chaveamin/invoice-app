@@ -61,7 +61,11 @@ export const generatePDF = (invoice: InvoiceData) => {
     y += 7;
   });
 
-  if (invoice.taxEnabled) {
+  // Print breakdown if there is Tax OR a Discount
+  if (
+    invoice.taxEnabled ||
+    (invoice.discountAmount && invoice.discountAmount > 0)
+  ) {
     doc.setTextColor(107, 114, 128);
     doc.setFontSize(11);
 
@@ -70,10 +74,23 @@ export const generatePDF = (invoice: InvoiceData) => {
     doc.text("تومان", 23, y);
     y += 7;
 
-    doc.text(":مالیات (10%)", 190, y, { align: "right" });
-    doc.text(`${(invoice.taxAmount || 0).toLocaleString("fa-IR")}`, 37, y);
-    doc.text("تومان", 23, y);
-    y += 7;
+    if (invoice.discountAmount > 0) {
+      doc.text(":تخفیف", 190, y, { align: "right" });
+      doc.text(
+        `${(invoice.discountAmount || 0).toLocaleString("fa-IR")}`,
+        37,
+        y,
+      );
+      doc.text("تومان", 23, y);
+      y += 7;
+    }
+
+    if (invoice.taxEnabled) {
+      doc.text(":مالیات (10%)", 190, y, { align: "right" });
+      doc.text(`${(invoice.taxAmount || 0).toLocaleString("fa-IR")}`, 37, y);
+      doc.text("تومان", 23, y);
+      y += 7;
+    }
   }
 
   doc.setDrawColor(255, 255, 255);

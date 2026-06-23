@@ -129,8 +129,8 @@ export default function InvoicePreview({ onBack }: InvoicePreviewProps) {
             {/* Totals Section */}
             <div className="flex justify-end">
               <div className="w-full space-y-3">
-                {/* Conditionally render Tax and Subtotal in the HTML preview if enabled */}
-                {invoice.taxEnabled && (
+                {(invoice.taxEnabled ||
+                  (invoice.discountAmount && invoice.discountAmount > 0)) && (
                   <>
                     <div className="flex justify-between text-muted-foreground text-sm">
                       <span>جمع کل:</span>
@@ -138,12 +138,28 @@ export default function InvoicePreview({ onBack }: InvoicePreviewProps) {
                         {(invoice.subtotal || 0).toLocaleString("fa-IR")} تومان
                       </span>
                     </div>
-                    <div className="flex justify-between text-muted-foreground text-sm">
-                      <span>مالیات (10%):</span>
-                      <span>
-                        {(invoice.taxAmount || 0).toLocaleString("fa-IR")} تومان
-                      </span>
-                    </div>
+
+                    {invoice.discountAmount > 0 && (
+                      <div className="flex justify-between text-muted-foreground text-sm">
+                        <span>تخفیف:</span>
+                        <span className="text-red-500">
+                          {(invoice.discountAmount || 0).toLocaleString(
+                            "fa-IR",
+                          )}{" "}
+                          - تومان
+                        </span>
+                      </div>
+                    )}
+
+                    {invoice.taxEnabled && (
+                      <div className="flex justify-between text-muted-foreground text-sm">
+                        <span>مالیات (10%):</span>
+                        <span>
+                          {(invoice.taxAmount || 0).toLocaleString("fa-IR")}{" "}
+                          تومان
+                        </span>
+                      </div>
+                    )}
                     <hr />
                   </>
                 )}

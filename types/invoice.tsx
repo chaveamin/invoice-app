@@ -14,6 +14,9 @@ export interface InvoiceData {
   employerProjectName: string;
   employerWebsite: string;
   items: InvoiceItem[];
+  discountType: "percentage" | "fixed" | "none";
+  discountValue: number;
+  discountAmount: number;
   subtotal: number;
   taxEnabled: boolean;
   taxAmount: number;

@@ -25,6 +25,39 @@ export function InvoiceProvider({ children }: { children: ReactNode }) {
   const updateInvoice = (updates: Partial<InvoiceData>) => {
     const newInvoice = { ...invoice, ...updates };
 
+    if (
+      updates.items !== undefined ||
+      updates.taxEnabled !== undefined ||
+      updates.discountType !== undefined ||
+      updates.discountValue !== undefined
+    ) {
+      const itemsToUse = updates.items || invoice.items;
+      const taxToUse =
+        updates.taxEnabled !== undefined
+          ? updates.taxEnabled
+          : invoice.taxEnabled;
+      const discountTypeToUse =
+        updates.discountType !== undefined
+          ? updates.discountType
+          : invoice.discountType;
+      const discountValueToUse =
+        updates.discountValue !== undefined
+          ? updates.discountValue
+          : invoice.discountValue;
+
+      const { subtotal, discountAmount, taxAmount, total } = calculateTotals(
+        itemsToUse,
+        taxToUse,
+        discountTypeToUse,
+        discountValueToUse,
+      );
+
+      newInvoice.subtotal = subtotal;
+      newInvoice.discountAmount = discountAmount;
+      newInvoice.taxAmount = taxAmount;
+      newInvoice.total = total;
+    }
+
     if (updates.items !== undefined || updates.taxEnabled !== undefined) {
       const itemsToUse = updates.items || invoice.items;
       const taxToUse =
