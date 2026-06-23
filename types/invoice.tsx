@@ -19,6 +19,7 @@ export interface InvoiceData {
   discountAmount: number;
   subtotal: number;
   taxEnabled: boolean;
+  taxRate: number;
   taxAmount: number;
   total: number;
 }

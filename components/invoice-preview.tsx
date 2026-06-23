@@ -153,7 +153,7 @@ export default function InvoicePreview({ onBack }: InvoicePreviewProps) {
 
                     {invoice.taxEnabled && (
                       <div className="flex justify-between text-muted-foreground text-sm">
-                        <span>مالیات (10%):</span>
+                        <span>مالیات ({invoice.taxRate ?? 10}%):</span>
                         <span>
                           {(invoice.taxAmount || 0).toLocaleString("fa-IR")}{" "}
                           تومان
@@ -166,7 +166,9 @@ export default function InvoicePreview({ onBack }: InvoicePreviewProps) {
 
                 <div className="flex justify-between font-bold text-lg">
                   <span>مبلغ نهایی:</span>
-                  <span>{invoice.total.toLocaleString("fa-IR")} تومان</span>
+                  <span>
+                    {(invoice.total || 0).toLocaleString("fa-IR")} تومان
+                  </span>
                 </div>
               </div>
             </div>

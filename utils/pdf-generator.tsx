@@ -85,11 +85,37 @@ export const generatePDF = (invoice: InvoiceData) => {
       y += 7;
     }
 
-    if (invoice.taxEnabled) {
-      doc.text(":مالیات (10%)", 190, y, { align: "right" });
-      doc.text(`${(invoice.taxAmount || 0).toLocaleString("fa-IR")}`, 37, y);
+    if (
+      invoice.taxEnabled ||
+      (invoice.discountAmount && invoice.discountAmount > 0)
+    ) {
+      doc.setTextColor(107, 114, 128);
+      doc.setFontSize(11);
+
+      doc.text(":جمع کل", 190, y, { align: "right" });
+      doc.text(`${(invoice.subtotal || 0).toLocaleString("fa-IR")}`, 37, y);
       doc.text("تومان", 23, y);
       y += 7;
+
+      if (invoice.discountAmount > 0) {
+        doc.text(":تخفیف", 190, y, { align: "right" });
+        doc.text(
+          `${(invoice.discountAmount || 0).toLocaleString("fa-IR")}`,
+          37,
+          y,
+        );
+        doc.text("تومان", 23, y);
+        y += 7;
+      }
+
+      if (invoice.taxEnabled) {
+        doc.text(`:مالیات (${invoice.taxRate ?? 10}%)`, 190, y, {
+          align: "right",
+        });
+        doc.text(`${(invoice.taxAmount || 0).toLocaleString("fa-IR")}`, 37, y);
+        doc.text("تومان", 23, y);
+        y += 7;
+      }
     }
   }
 

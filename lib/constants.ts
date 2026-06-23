@@ -20,6 +20,7 @@ export const initialInvoiceData: InvoiceData = {
   discountAmount: 0,
   subtotal: 0,
   taxEnabled: false,
+  taxRate: 10,
   taxAmount: 0,
   total: 0,
 };

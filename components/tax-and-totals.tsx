@@ -11,6 +11,7 @@ export default function TaxAndTotals() {
     <Card>
       <CardContent className="grid grid-cols-1 pt-6">
         <div className="space-y-4">
+          {/* Discount Section */}
           <div className="space-y-2">
             <Label>تخفیف</Label>
             <div className="flex gap-2">
@@ -47,38 +48,57 @@ export default function TaxAndTotals() {
             </div>
           </div>
 
-          <div className="flex items-center space-x-2">
-            <Switch
-              id="tax"
-              checked={invoice.taxEnabled}
-              onCheckedChange={(checked) =>
-                updateInvoice({ taxEnabled: checked })
-              }
-            />
-            <Label htmlFor="tax" className="cursor-pointer m-0">
-              افزودن مالیات (10%)
-            </Label>
+          {/* Tax Section */}
+          <div className="flex items-center justify-between h-10">
+            <div className="flex items-center space-x-2">
+              <Switch
+                id="tax"
+                checked={invoice.taxEnabled}
+                onCheckedChange={(checked) =>
+                  updateInvoice({ taxEnabled: checked })
+                }
+              />
+              <Label htmlFor="tax" className="cursor-pointer m-0 px-2">
+                افزودن مالیات
+              </Label>
+            </div>
+
+            {/* Custom Tax Rate Input */}
+            {invoice.taxEnabled && (
+              <div className="flex items-center gap-2">
+                <Input
+                  type="number"
+                  min="0"
+                  max="100"
+                  className="w-20 h-8 text-center"
+                  value={invoice.taxRate ?? 10}
+                  onChange={(e) =>
+                    updateInvoice({ taxRate: Number(e.target.value) || 0 })
+                  }
+                />
+                <span className="text-sm font-medium">%</span>
+              </div>
+            )}
           </div>
 
+          {/* Breakdown Section */}
           <div className="flex justify-between text-muted-foreground text-sm mt-4">
             <span>جمع کل:</span>
             <span>{(invoice.subtotal || 0).toLocaleString("fa-IR")} تومان</span>
           </div>
 
-          {invoice.discountType &&
-            invoice.discountType !== "none" &&
-            invoice.discountAmount > 0 && (
-              <div className="flex justify-between text-muted-foreground text-sm">
-                <span>تخفیف:</span>
-                <span className="text-red-500">
-                  {(invoice.discountAmount || 0).toLocaleString("fa-IR")}- تومان
-                </span>
-              </div>
-            )}
+          {invoice.discountAmount > 0 && (
+            <div className="flex justify-between text-muted-foreground text-sm">
+              <span>تخفیف:</span>
+              <span className="text-red-500">
+                {(invoice.discountAmount || 0).toLocaleString("fa-IR")}- تومان
+              </span>
+            </div>
+          )}
 
           {invoice.taxEnabled && (
             <div className="flex justify-between text-muted-foreground text-sm">
-              <span>مالیات (10%):</span>
+              <span>مالیات ({invoice.taxRate ?? 10}%):</span>
               <span>
                 {(invoice.taxAmount || 0).toLocaleString("fa-IR")} تومان
               </span>
@@ -89,7 +109,7 @@ export default function TaxAndTotals() {
 
           <div className="flex justify-between font-bold text-xl">
             <span>مبلغ نهایی:</span>
-            <span>{invoice.total.toLocaleString("fa-IR")} تومان</span>
+            <span>{(invoice.total || 0).toLocaleString("fa-IR")} تومان</span>
           </div>
         </div>
       </CardContent>

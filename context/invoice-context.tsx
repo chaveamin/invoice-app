@@ -28,6 +28,7 @@ export function InvoiceProvider({ children }: { children: ReactNode }) {
     if (
       updates.items !== undefined ||
       updates.taxEnabled !== undefined ||
+      updates.taxRate !== undefined ||
       updates.discountType !== undefined ||
       updates.discountValue !== undefined
     ) {
@@ -36,41 +37,27 @@ export function InvoiceProvider({ children }: { children: ReactNode }) {
         updates.taxEnabled !== undefined
           ? updates.taxEnabled
           : invoice.taxEnabled;
+      const taxRateToUse =
+        updates.taxRate !== undefined ? updates.taxRate : invoice.taxRate || 10;
       const discountTypeToUse =
         updates.discountType !== undefined
           ? updates.discountType
-          : invoice.discountType;
+          : invoice.discountType || "none";
       const discountValueToUse =
         updates.discountValue !== undefined
           ? updates.discountValue
-          : invoice.discountValue;
+          : invoice.discountValue || 0;
 
       const { subtotal, discountAmount, taxAmount, total } = calculateTotals(
         itemsToUse,
         taxToUse,
+        taxRateToUse,
         discountTypeToUse,
         discountValueToUse,
       );
 
       newInvoice.subtotal = subtotal;
       newInvoice.discountAmount = discountAmount;
-      newInvoice.taxAmount = taxAmount;
-      newInvoice.total = total;
-    }
-
-    if (updates.items !== undefined || updates.taxEnabled !== undefined) {
-      const itemsToUse = updates.items || invoice.items;
-      const taxToUse =
-        updates.taxEnabled !== undefined
-          ? updates.taxEnabled
-          : invoice.taxEnabled;
-
-      const { subtotal, taxAmount, total } = calculateTotals(
-        itemsToUse,
-        taxToUse,
-      );
-
-      newInvoice.subtotal = subtotal;
       newInvoice.taxAmount = taxAmount;
       newInvoice.total = total;
     }
@@ -130,7 +117,6 @@ export function InvoiceProvider({ children }: { children: ReactNode }) {
       }
       newItems[index].amount = quantity * rate;
     }
-    console.log(newItems);
 
     updateInvoice({ items: newItems });
   };

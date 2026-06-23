@@ -3,8 +3,9 @@ import type { InvoiceItem } from "@/types/invoice";
 export const calculateTotals = (
   items: InvoiceItem[],
   taxEnabled: boolean,
+  taxRate: number = 10,
   discountType: "percentage" | "fixed" | "none" = "none",
-  discountValue: number = 0
+  discountValue: number = 0,
 ) => {
   const subtotal = items.reduce((sum, item) => {
     const amount = typeof item.amount === "number" ? item.amount : 0;
@@ -20,12 +21,11 @@ export const calculateTotals = (
   }
 
   discountAmount = Math.min(discountAmount, subtotal);
-  
-  // 2. Apply Discount
+
+  // Apply Discount
   const discountedSubtotal = subtotal - discountAmount;
 
-  // 3. Calculate Tax
-  const taxAmount = taxEnabled ? discountedSubtotal * 0.1 : 0;
+  const taxAmount = taxEnabled ? discountedSubtotal * (taxRate / 100) : 0;
   const total = discountedSubtotal + taxAmount;
 
   return { subtotal, discountAmount, taxAmount, total };
