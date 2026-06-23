@@ -22,6 +22,7 @@ interface InvoiceContextType {
     value: string | number,
   ) => void;
   clearDraft: () => void;
+  reorderItems: (oldIndex: number, newIndex: number) => void;
 }
 
 const InvoiceContext = createContext<InvoiceContextType | undefined>(undefined);
@@ -152,6 +153,13 @@ export function InvoiceProvider({ children }: { children: ReactNode }) {
     updateInvoice({ items: newItems });
   };
 
+  const reorderItems = (oldIndex: number, newIndex: number) => {
+    const newItems = [...invoice.items];
+    const [movedItem] = newItems.splice(oldIndex, 1);
+    newItems.splice(newIndex, 0, movedItem);
+    updateInvoice({ items: newItems });
+  };
+
   return (
     <InvoiceContext.Provider
       value={{
@@ -161,6 +169,7 @@ export function InvoiceProvider({ children }: { children: ReactNode }) {
         removeItem,
         updateItem,
         clearDraft,
+        reorderItems,
       }}
     >
       {children}
