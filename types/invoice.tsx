@@ -23,6 +23,7 @@ export interface InvoiceData {
   taxAmount: number;
   total: number;
   logo?: string | null;
+  notes?: string;
 }
 
 export interface InvoiceTemplate {

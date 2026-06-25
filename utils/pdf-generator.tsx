@@ -1,3 +1,5 @@
+// utils/pdf-generator.tsx
+
 import { InvoiceData } from "@/types/invoice";
 import { jsPDF } from "jspdf";
 import { formatDate } from "@/utils/formatters";
@@ -17,9 +19,14 @@ export const generatePDF = (invoice: InvoiceData) => {
 
   if (invoice.logo) {
     try {
-      const imgSize = 10;
-      doc.addImage(invoice.logo, 92.5, y, imgSize, imgSize);
-      y += imgSize + 8;
+      const props = doc.getImageProperties(invoice.logo);
+
+      const targetWidth = 8;
+      const targetHeight = (props.height * targetWidth) / props.width;
+
+      doc.addImage(invoice.logo, 180, y, targetWidth, targetHeight);
+
+      y += targetHeight + 8;
     } catch (e) {
       console.error("Failed to add logo:", e);
     }
@@ -94,32 +101,13 @@ export const generatePDF = (invoice: InvoiceData) => {
       y += 7;
     }
 
-    if (
-      invoice.taxEnabled ||
-      (invoice.discountAmount && invoice.discountAmount > 0)
-    ) {
-      doc.setTextColor(107, 114, 128);
-      doc.setFontSize(11);
-
-      if (invoice.discountAmount > 0) {
-        doc.text(":تخفیف", 190, y, { align: "right" });
-        doc.text(
-          `${(invoice.discountAmount || 0).toLocaleString("fa-IR")}`,
-          37,
-          y,
-        );
-        doc.text("تومان", 23, y);
-        y += 7;
-      }
-
-      if (invoice.taxEnabled) {
-        doc.text(`:مالیات (${invoice.taxRate ?? 10}%)`, 190, y, {
-          align: "right",
-        });
-        doc.text(`${(invoice.taxAmount || 0).toLocaleString("fa-IR")}`, 37, y);
-        doc.text("تومان", 23, y);
-        y += 7;
-      }
+    if (invoice.taxEnabled) {
+      doc.text(`:${invoice.taxRate ?? 10}% مالیات`, 190, y, {
+        align: "right",
+      });
+      doc.text(`${(invoice.taxAmount || 0).toLocaleString("fa-IR")}`, 37, y);
+      doc.text("تومان", 23, y);
+      y += 7;
     }
   }
 
@@ -135,29 +123,27 @@ export const generatePDF = (invoice: InvoiceData) => {
   doc.text("تومان", 23, y);
 
   y += 12;
-  doc.setFontSize(10);
-  doc.setLineWidth(0.35);
-  doc.setDrawColor(37, 99, 235);
-  doc.setFillColor(255, 255, 255);
-  doc.roundedRect(20, y, 170, 50, 3, 3, "FD");
-  doc.setTextColor(107, 114, 128);
-  y += 10;
-  doc.text("قبل از شروع کار 50 درصدر از کل مبلغ فاکتور پرداخت میشود", 185, y, {
-    align: "right",
-  });
-  y += 10;
-  doc.text("جهت مشاهده پیشرفت پروژه; کار در ورسل آپلود میشود", 185, y, {
-    align: "right",
-  });
-  y += 10;
-  doc.setLineHeightFactor(2);
-  const textContent =
-    "اولین ویرایش رایگان است: بعد از تحویل; کار توسط کارفرما بررسی میشود و در صورت هر گونه اصلاحات همه آنها را در یک پیام به طراح گزارش میدهد. بعد از اصلاح موارد هرگونه ویرایشات بعدی با هزینه انجام میشود";
-  const maxWidth = 190;
-  const splitText = doc.splitTextToSize(textContent, maxWidth);
-  doc.text(splitText, 185, y, { align: "right" });
 
-  // Generate blob URL untuk preview
+  if (invoice.notes && invoice.notes.trim() !== "") {
+    doc.setFontSize(10);
+    doc.setLineWidth(0.35);
+    doc.setDrawColor(37, 99, 235);
+    doc.setFillColor(255, 255, 255);
+
+    doc.setLineHeightFactor(2);
+    const maxWidth = 180;
+
+    const splitText = doc.splitTextToSize(invoice.notes, maxWidth);
+
+    const rectHeight = Math.max(30, splitText.length * 7 + 10);
+
+    doc.roundedRect(20, y, 170, rectHeight, 3, 3, "FD");
+    doc.setTextColor(107, 114, 128);
+    y += 10;
+
+    doc.text(splitText, 185, y, { align: "right" });
+  }
+
   const pdfBlob = doc.output("blob");
   return URL.createObjectURL(pdfBlob);
 };

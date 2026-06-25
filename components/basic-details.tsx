@@ -98,6 +98,17 @@ export default function BasicDetails() {
             )}
           </div>
         </div>
+
+        {/* NOTES SECTION */}
+        <div className="space-y-2 pt-2 col-span-2">
+          <Label>یادداشت‌ها / شرایط پرداخت</Label>
+          <textarea
+            className="flex min-h-[100px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+            value={invoice.notes ?? ""}
+            onChange={(e) => updateInvoice({ notes: e.target.value })}
+            placeholder="شرایط پرداخت و یادداشت‌های خود را اینجا وارد کنید..."
+          />
+        </div>
       </CardContent>
     </Card>
   );
