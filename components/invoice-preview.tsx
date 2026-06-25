@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Button } from "./ui/button";
-import { Download, Eye } from "lucide-react";
+import { Download, Eye, Share2, Copy, Check } from "lucide-react";
 import { Card, CardContent } from "./ui/card";
 import { useInvoice } from "@/context/invoice-context";
 import { generatePDF } from "@/utils/pdf-generator";
@@ -14,6 +14,9 @@ interface InvoicePreviewProps {
 export default function InvoicePreview({ onBack }: InvoicePreviewProps) {
   const { invoice } = useInvoice();
   const [pdfUrl, setPdfUrl] = useState<string | null>(null);
+  const [isSharing, setIsSharing] = useState(false);
+  const [shareUrl, setShareUrl] = useState<string | null>(null);
+  const [copied, setCopied] = useState(false);
 
   const handlePreviewPDF = () => {
     const url = generatePDF(invoice);
@@ -29,6 +32,36 @@ export default function InvoicePreview({ onBack }: InvoicePreviewProps) {
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+  };
+
+  const handleShare = async () => {
+    setIsSharing(true);
+    try {
+      const res = await fetch("/api/share", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(invoice),
+      });
+      const data = await res.json();
+
+      if (data.url) {
+        const fullUrl = `${window.location.origin}${data.url}`;
+        setShareUrl(fullUrl);
+      }
+    } catch (error) {
+      console.error("Failed to share", error);
+      alert("خطا در ایجاد لینک");
+    } finally {
+      setIsSharing(false);
+    }
+  };
+
+  const copyToClipboard = () => {
+    if (shareUrl) {
+      navigator.clipboard.writeText(shareUrl);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    }
   };
 
   const formattedDate = new Intl.DateTimeFormat("fa-IR", {
@@ -52,14 +85,52 @@ export default function InvoicePreview({ onBack }: InvoicePreviewProps) {
             >
               بازگشت
             </Button>
+
             <Button onClick={handlePreviewPDF}>
               <Eye />
             </Button>
+
+            <Button
+              variant="secondary"
+              onClick={handleShare}
+              disabled={isSharing}
+              className="cursor-pointer"
+            >
+              <Share2 className="mr-2 h-4 w-4" />
+              {isSharing ? "در حال ایجاد..." : "اشتراک‌گذاری"}
+            </Button>
+
             <Button variant="outline" size="icon" onClick={handleDownloadPDF}>
               <Download />
             </Button>
           </div>
         </div>
+
+        {/* SHARE URL BOX */}
+        {shareUrl && (
+          <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg flex items-center justify-between">
+            <div>
+              <p className="text-sm font-semibold text-blue-800 mb-1">
+                لینک فاکتور شما آماده است
+              </p>
+              <p className="text-xs text-blue-600" dir="ltr">
+                {shareUrl}
+              </p>
+            </div>
+            <Button
+              onClick={copyToClipboard}
+              variant={copied ? "default" : "outline"}
+              className={`cursor-pointer transition-colors ${copied ? "bg-green-600 hover:bg-green-700 text-white border-none" : ""}`}
+            >
+              {copied ? (
+                <Check className="h-4 w-4 mr-2" />
+              ) : (
+                <Copy className="h-4 w-4 mr-2" />
+              )}
+              {copied ? "کپی شد" : "کپی لینک"}
+            </Button>
+          </div>
+        )}
 
         {/* PDF Iframe */}
         {pdfUrl && (
