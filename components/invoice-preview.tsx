@@ -21,10 +21,10 @@ export default function InvoicePreview({ onBack }: InvoicePreviewProps) {
   };
 
   const handleDownloadPDF = () => {
-    if (!pdfUrl) return;
+    const url = pdfUrl || generatePDF(invoice);
 
     const link = document.createElement("a");
-    link.href = pdfUrl;
+    link.href = url;
     link.download = `${invoice.invoiceNumber || "invoice"}.pdf`;
     document.body.appendChild(link);
     link.click();

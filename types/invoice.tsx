@@ -24,6 +24,7 @@ export interface InvoiceData {
   total: number;
   logo?: string | null;
   notes?: string;
+  colorTheme?: string;
 }
 
 export interface InvoiceTemplate {

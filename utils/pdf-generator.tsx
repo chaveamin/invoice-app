@@ -6,6 +6,8 @@ import { formatDate } from "@/utils/formatters";
 import "@/utils/YekanBakhFaNum-Bold-bold";
 
 export const generatePDF = (invoice: InvoiceData) => {
+  const themeColor = invoice.colorTheme || "#2563eb";
+
   // CALCULATE DYNAMIC HEIGHT
   const calculatePageHeight = () => {
     // Temporary instance just to measure text wrapping and heights
@@ -83,7 +85,7 @@ export const generatePDF = (invoice: InvoiceData) => {
   }
 
   doc.setDrawColor(255, 255, 255);
-  doc.setFillColor(37, 99, 235);
+  doc.setFillColor(themeColor);
   doc.roundedRect(20, y, 170, 20, 4, 4, "FD");
   doc.setTextColor(249, 250, 251);
   doc.setFontSize(13);
@@ -162,7 +164,7 @@ export const generatePDF = (invoice: InvoiceData) => {
   }
 
   doc.setDrawColor(255, 255, 255);
-  doc.setFillColor(37, 99, 235);
+  doc.setFillColor(themeColor);
   doc.roundedRect(20, y, 170, 15, 2.5, 2.5, "FD");
   doc.setTextColor(249, 250, 251);
 
@@ -178,7 +180,7 @@ export const generatePDF = (invoice: InvoiceData) => {
   if (invoice.notes && invoice.notes.trim() !== "") {
     doc.setFontSize(10);
     doc.setLineWidth(0.35);
-    doc.setDrawColor(37, 99, 235);
+    doc.setDrawColor(themeColor);
     doc.setFillColor(255, 255, 255);
 
     doc.setLineHeightFactor(2);

@@ -42,6 +42,7 @@ export default function BasicDetails() {
         <CardTitle className="font-bold text-xl">جزئیات فاکتور</CardTitle>
       </CardHeader>
       <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {/* INV NUM */}
         <div>
           <Label
             className="mb-3 text-base font-semibold"
@@ -55,6 +56,7 @@ export default function BasicDetails() {
             id="invoiceNumber"
           />
         </div>
+        {/* DATE */}
         <div>
           <Label className="mb-3 text-base font-semibold" htmlFor="date">
             تاریخ
@@ -108,6 +110,25 @@ export default function BasicDetails() {
             onChange={(e) => updateInvoice({ notes: e.target.value })}
             placeholder="شرایط پرداخت و یادداشت‌های خود را اینجا وارد کنید..."
           />
+        </div>
+
+        {/* COLOR THEME */}
+        <div>
+          <Label className="mb-3 text-base font-semibold" htmlFor="colorTheme">
+            رنگ قالب فاکتور
+          </Label>
+          <div className="flex items-center gap-4 mt-2">
+            <input
+              id="colorTheme"
+              type="color"
+              value={invoice.colorTheme || "#2563eb"}
+              onChange={(e) => updateInvoice({ colorTheme: e.target.value })}
+              className="w-full h-10 p-1 cursor-pointer rounded-lg border border-gray-200"
+            />
+            <span className="text-sm text-muted-foreground font-medium uppercase tracking-wider">
+              {invoice.colorTheme || "#2563eb"}
+            </span>
+          </div>
         </div>
       </CardContent>
     </Card>
