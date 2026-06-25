@@ -66,4 +66,4 @@ npm run dev
 
 ---
 
-توسعه داده شده توسط [امین چاوه پور](https://www.google.com/search?q=https://github.com/chaveamin)
+توسعه داده شده توسط [امین چاوه پور](https://github.com/chaveamin)
