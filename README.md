@@ -24,7 +24,7 @@
 
 ## 🚀 راه‌اندازی
 
-1. مخزن را کلون کنید
+1. پروژه را کلون کنید
 
 ```bash
 git clone https://github.com/chaveamin/invoice-app.git
