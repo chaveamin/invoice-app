@@ -41,9 +41,9 @@ export default function BasicDetails() {
       <CardHeader>
         <CardTitle className="font-bold text-xl">جزئیات فاکتور</CardTitle>
       </CardHeader>
-      <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <CardContent className="grid grid-cols-1 gap-4 md:grid-cols-2">
         {/* INV NUM */}
-        <div>
+        <div className="col-span-2 md:col-span-1">
           <Label
             className="mb-3 text-base font-semibold"
             htmlFor="invoiceNumber"
@@ -56,6 +56,7 @@ export default function BasicDetails() {
             id="invoiceNumber"
           />
         </div>
+
         {/* DATE */}
         <div>
           <Label className="mb-3 text-base font-semibold" htmlFor="date">
@@ -70,7 +71,7 @@ export default function BasicDetails() {
         </div>
 
         {/* LOGO UPLOAD */}
-        <div className="md:col-span-2">
+        <div className=" col-span-2">
           <Label className="mb-3 text-base font-semibold" htmlFor="logo">
             لوگو (PNG/SVG)
           </Label>
@@ -102,7 +103,7 @@ export default function BasicDetails() {
         </div>
 
         {/* NOTES SECTION */}
-        <div className="space-y-2 pt-2 col-span-2">
+        <div className="col-span-2">
           <Label>یادداشت‌ها / شرایط پرداخت</Label>
           <textarea
             className="flex min-h-[100px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"

@@ -78,30 +78,29 @@ export default function InvoicePreview({ onBack }: InvoicePreviewProps) {
 
           {/* Action Buttons */}
           <div className="flex items-center gap-2">
+            <Button onClick={handlePreviewPDF}>
+              <Eye />
+            </Button>
+
+            <Button
+              variant="outline"
+              size="icon"
+              onClick={handleShare}
+              disabled={isSharing}
+            >
+              <Share2 />
+            </Button>
+
+            <Button variant="outline" size="icon" onClick={handleDownloadPDF}>
+              <Download />
+            </Button>
+
             <Button
               className="cursor-pointer"
               variant="outline"
               onClick={onBack}
             >
               بازگشت
-            </Button>
-
-            <Button onClick={handlePreviewPDF}>
-              <Eye />
-            </Button>
-
-            <Button
-              variant="secondary"
-              onClick={handleShare}
-              disabled={isSharing}
-              className="cursor-pointer"
-            >
-              <Share2 className="mr-2 h-4 w-4" />
-              {isSharing ? "در حال ایجاد..." : "اشتراک‌گذاری"}
-            </Button>
-
-            <Button variant="outline" size="icon" onClick={handleDownloadPDF}>
-              <Download />
             </Button>
           </div>
         </div>
@@ -123,9 +122,9 @@ export default function InvoicePreview({ onBack }: InvoicePreviewProps) {
               className={`cursor-pointer transition-colors ${copied ? "bg-green-600 hover:bg-green-700 text-white border-none" : ""}`}
             >
               {copied ? (
-                <Check className="h-4 w-4 mr-2" />
+                <Check className="size-4 mr-2" />
               ) : (
-                <Copy className="h-4 w-4 mr-2" />
+                <Copy className="size-4 mr-2" />
               )}
               {copied ? "کپی شد" : "کپی لینک"}
             </Button>

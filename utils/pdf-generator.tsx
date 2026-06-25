@@ -52,7 +52,7 @@ export const generatePDF = (invoice: InvoiceData) => {
       cy += rectHeight;
     }
 
-    return cy + 10;
+    return cy + 100;
   };
 
   // Generate the required height (with a safety minimum of 150mm)
