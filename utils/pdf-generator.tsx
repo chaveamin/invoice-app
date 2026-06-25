@@ -15,6 +15,16 @@ export const generatePDF = (invoice: InvoiceData) => {
   doc.roundedRect(10, y, 190, 480, 6, 6, "FD");
   y += 10;
 
+  if (invoice.logo) {
+    try {
+      const imgSize = 10;
+      doc.addImage(invoice.logo, 92.5, y, imgSize, imgSize);
+      y += imgSize + 8;
+    } catch (e) {
+      console.error("Failed to add logo:", e);
+    }
+  }
+
   doc.setDrawColor(255, 255, 255);
   doc.setFillColor(37, 99, 235);
   doc.roundedRect(20, y, 170, 20, 4, 4, "FD");
@@ -24,20 +34,20 @@ export const generatePDF = (invoice: InvoiceData) => {
   doc.text(
     `${invoice.employerWebsite} / ${invoice.employerProjectName}`,
     105,
-    29,
+    y + 9,
     {
       align: "center",
     },
   );
   doc.setFontSize(12);
-  doc.text(formatDate(invoice.date), 110, 37, { align: "center" });
+  doc.text(formatDate(invoice.date), 110, y + 17, { align: "center" });
   y += 30;
 
   doc.setDrawColor(209, 213, 219);
 
   doc.setDrawColor(255, 255, 255);
   doc.setFillColor(249, 250, 251);
-  doc.roundedRect(20, 44, 170, 10, 2.5, 2.5, "FD");
+  doc.roundedRect(20, y - 6, 170, 10, 2.5, 2.5, "FD");
 
   doc.setFontSize(12);
   doc.setTextColor(107, 114, 128);

@@ -22,6 +22,7 @@ export interface InvoiceData {
   taxRate: number;
   taxAmount: number;
   total: number;
+  logo?: string | null;
 }
 
 export interface InvoiceTemplate {
