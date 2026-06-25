@@ -6,7 +6,58 @@ import { formatDate } from "@/utils/formatters";
 import "@/utils/YekanBakhFaNum-Bold-bold";
 
 export const generatePDF = (invoice: InvoiceData) => {
-  const doc = new jsPDF("p", "mm", [210, 500]);
+  // CALCULATE DYNAMIC HEIGHT
+  const calculatePageHeight = () => {
+    // Temporary instance just to measure text wrapping and heights
+    const tempDoc = new jsPDF("p", "mm", "a4");
+    tempDoc.setFont("YekanBakhFaNum-Bold", "normal", "bold");
+
+    let cy = 20; // 10mm top margin + 10mm initial padding
+
+    if (invoice.logo) {
+      try {
+        const props = tempDoc.getImageProperties(invoice.logo);
+        const targetHeight = (props.height * 25) / props.width;
+        cy += targetHeight + 8;
+      } catch (e) {
+        console.error("Failed to measure logo:", e);
+      }
+    }
+
+    cy += 30; // Header Area
+    cy += 13; // Table Columns Header
+
+    // Add height for each item row
+    cy += invoice.items.length * 14;
+
+    // Add height for Totals section
+    if (
+      invoice.taxEnabled ||
+      (invoice.discountAmount && invoice.discountAmount > 0)
+    ) {
+      cy += 7; // Subtotal
+      if (invoice.discountAmount > 0) cy += 7;
+      if (invoice.taxEnabled) cy += 7;
+    }
+
+    cy += 9; // Space moving inside final amount box
+    cy += 12; // Space below final amount box
+
+    if (invoice.notes && invoice.notes.trim() !== "") {
+      tempDoc.setFontSize(10);
+      const splitText = tempDoc.splitTextToSize(invoice.notes, 160);
+      const rectHeight = Math.max(30, splitText.length * 7 + 10);
+      cy += rectHeight;
+    }
+
+    return cy + 10;
+  };
+
+  // Generate the required height (with a safety minimum of 150mm)
+  const dynamicPageHeight = Math.max(calculatePageHeight(), 150);
+
+  // RENDER THE ACTUAL PDF
+  const doc = new jsPDF("p", "mm", [210, dynamicPageHeight]);
   let y = 10;
 
   doc.setLanguage("fa-IR");
@@ -14,18 +65,17 @@ export const generatePDF = (invoice: InvoiceData) => {
 
   doc.setDrawColor(229, 231, 235);
   doc.setFillColor(255, 255, 255);
-  doc.roundedRect(10, y, 190, 480, 6, 6, "FD");
+  doc.roundedRect(10, y, 190, dynamicPageHeight - 20, 6, 6, "FD");
   y += 10;
 
+  // Logo
   if (invoice.logo) {
     try {
       const props = doc.getImageProperties(invoice.logo);
-
       const targetWidth = 8;
       const targetHeight = (props.height * targetWidth) / props.width;
 
-      doc.addImage(invoice.logo, 180, y, targetWidth, targetHeight);
-
+      doc.addImage(invoice.logo, 92.5, y, targetWidth, targetHeight);
       y += targetHeight + 8;
     } catch (e) {
       console.error("Failed to add logo:", e);
@@ -102,7 +152,7 @@ export const generatePDF = (invoice: InvoiceData) => {
     }
 
     if (invoice.taxEnabled) {
-      doc.text(`:${invoice.taxRate ?? 10}% مالیات`, 190, y, {
+      doc.text(`:مالیات (${invoice.taxRate ?? 10}%)`, 190, y, {
         align: "right",
       });
       doc.text(`${(invoice.taxAmount || 0).toLocaleString("fa-IR")}`, 37, y);
@@ -124,6 +174,7 @@ export const generatePDF = (invoice: InvoiceData) => {
 
   y += 12;
 
+  // Notes
   if (invoice.notes && invoice.notes.trim() !== "") {
     doc.setFontSize(10);
     doc.setLineWidth(0.35);
@@ -131,7 +182,7 @@ export const generatePDF = (invoice: InvoiceData) => {
     doc.setFillColor(255, 255, 255);
 
     doc.setLineHeightFactor(2);
-    const maxWidth = 180;
+    const maxWidth = 160;
 
     const splitText = doc.splitTextToSize(invoice.notes, maxWidth);
 
