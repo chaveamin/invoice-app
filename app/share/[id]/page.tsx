@@ -6,6 +6,7 @@ import { InvoiceData } from "@/types/invoice";
 import { generatePDF } from "@/utils/pdf-generator";
 import { Button } from "@/components/ui/button";
 import { Download } from "lucide-react";
+import Head from "next/head";
 
 export default function SharedInvoicePage() {
   const params = useParams();
@@ -22,6 +23,7 @@ export default function SharedInvoicePage() {
       .then((data) => {
         setInvoice(data);
         setPdfUrl(generatePDF(data));
+        document.title = `فاکتور ${data.invoiceNumber}`;
       })
       .catch(() => setError(true));
   }, [params.id]);

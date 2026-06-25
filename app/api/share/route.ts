@@ -22,10 +22,7 @@ export async function POST(request: Request) {
 
     return NextResponse.json({ id, url: `/share/${id}` });
   } catch (error) {
-    return NextResponse.json(
-      { error: "Failed to generate link" },
-      { status: 500 },
-    );
+    return NextResponse.json({ error: "خطا در ساخت لینک" }, { status: 500 });
   }
 }
 
@@ -34,10 +31,7 @@ export async function GET(request: Request) {
   const id = searchParams.get("id");
 
   if (!id || !invoiceStore.has(id)) {
-    return NextResponse.json(
-      { error: "Invoice not found or expired" },
-      { status: 404 },
-    );
+    return NextResponse.json({ error: "فاکتور پیدا نشد" }, { status: 404 });
   }
 
   return NextResponse.json(invoiceStore.get(id));
